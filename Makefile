@@ -64,11 +64,13 @@ $(BUILD_SCRIPT_LOCATION):
 
 # Changing of configuration files only via differences
 define ReconfigureConfig
+#	echo THE 1 THING IS $(1)
 	sed 's:HOST="piratebox.lan":HOST="librarybox.lan":'  -i  $(1)/piratebox.conf
 	sed 's:DROOPY_ENABLED="yes":DROOPY_ENABLED="no":'  -i  $(1)/piratebox.conf
 	sed 's:ssid=PirateBox - Share Freely:ssid=LibraryBox - Free Content!:' -i $(1)/hostapd.conf
 	echo 'include "/opt/piratebox/conf/lighttpd/fastcgi.conf"' >> $(1)/lighttpd/lighttpd.conf
 	echo 'include "/opt/piratebox/conf/lighttpd/custom_index.conf"' >> $(1)/lighttpd/lighttpd.conf
+	sed '/make the default/ i \  ".svg"         =>      "image/svg",' -i $(1)/lighttpd/mime.types
 	sed 's|IPV6_ENABLE="no"|IPV6_ENABLE="yes"|' -i  $(1)/ipv6.conf
 endef
 
@@ -150,5 +152,3 @@ all: image package
 shortimage: image
 
 package: $(MOD_PACKAGE_TGZ)
-
-
