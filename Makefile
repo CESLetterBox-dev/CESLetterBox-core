@@ -10,7 +10,7 @@ SRC_SCRIPT_LOCATION=$(SRC_FOLDER)/piratebox/piratebox
 SRC_VERSION_TAG=$(SRC_SCRIPT_LOCATION)/version
 
 #UI
-UI_SRC_FOLDER=LibraryBox-landingpage
+UI_SRC_FOLDER=CESLetterBox-landingpage
 
 BUILD_FOLDER=build_dir
 BUILD_SCRIPT_LOCATION=$(BUILD_FOLDER)/piratebox
@@ -65,9 +65,9 @@ $(BUILD_SCRIPT_LOCATION):
 # Changing of configuration files only via differences
 define ReconfigureConfig
 #	echo THE 1 THING IS $(1)
-	sed 's:HOST="piratebox.lan":HOST="librarybox.lan":'  -i  $(1)/piratebox.conf
+	sed 's:HOST="piratebox.lan":HOST="cesletterbox.lan":'  -i  $(1)/piratebox.conf
 	sed 's:DROOPY_ENABLED="yes":DROOPY_ENABLED="no":'  -i  $(1)/piratebox.conf
-	sed 's:ssid=PirateBox - Share Freely:ssid=LibraryBox - Free Content!:' -i $(1)/hostapd.conf
+	sed 's:ssid=PirateBox - Share Freely:ssid=CES LetterBox - Offline LDS Study:' -i $(1)/hostapd.conf
 	echo 'include "/opt/piratebox/conf/lighttpd/fastcgi.conf"' >> $(1)/lighttpd/lighttpd.conf
 	echo 'include "/opt/piratebox/conf/lighttpd/custom_index.conf"' >> $(1)/lighttpd/lighttpd.conf
 	sed '/make the default/ i \  ".svg"         =>      "image/svg",' -i $(1)/lighttpd/mime.types
