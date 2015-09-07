@@ -1,5 +1,5 @@
 NAME = librarybox
-VERSION = 2.0.0
+VERSION = 2.1.0_beta3
 ARCH = all
 
 #PIRATEBOX_IMG_URL = "http://piratebox.aod-rpg.de/piratebox_ws_0.6_img.gz"
@@ -24,7 +24,7 @@ MOD_VERSION_TAG=$(BUILD_SCRIPT_LOCATION)/version_tag_mod
 
 # Filename requested by 
 MOD_IMAGE=$(IMAGE_BUILD)/OpenWRT_image
-MOD_IMAGE_TGZ=$(NAME)_2.0_img.tar.gz
+MOD_IMAGE_TGZ=$(NAME)_2.1_img.tar.gz
 
 
 #------------
@@ -64,11 +64,13 @@ $(BUILD_SCRIPT_LOCATION):
 
 # Changing of configuration files only via differences
 define ReconfigureConfig
+#	echo THE 1 THING IS $(1)
 	sed 's:HOST="piratebox.lan":HOST="librarybox.lan":'  -i  $(1)/piratebox.conf
 	sed 's:DROOPY_ENABLED="yes":DROOPY_ENABLED="no":'  -i  $(1)/piratebox.conf
 	sed 's:ssid=PirateBox - Share Freely:ssid=LibraryBox - Free Content!:' -i $(1)/hostapd.conf
 	echo 'include "/opt/piratebox/conf/lighttpd/fastcgi.conf"' >> $(1)/lighttpd/lighttpd.conf
 	echo 'include "/opt/piratebox/conf/lighttpd/custom_index.conf"' >> $(1)/lighttpd/lighttpd.conf
+	sed '/make the default/ i \  ".svg"         =>      "image/svg",' -i $(1)/lighttpd/mime.types
 	sed 's|IPV6_ENABLE="no"|IPV6_ENABLE="yes"|' -i  $(1)/ipv6.conf
 endef
 
@@ -96,7 +98,7 @@ apply_custom_config:
 	$(call ReconfigureConfig,$(IMAGE_BUILD_SRC)/conf)
 
 $(MOD_IMAGE):
-	gunzip -dc  $(SRC_FOLDER)/image_stuff/OpenWRT.img.gz > $@
+	gunzip -dc  $(SRC_FOLDER)/image_stuff/OpenWRT_ext4_50MB.img.gz > $@
 
 
 $(MOD_IMAGE_TGZ): $(IMAGE_BUILD_TGT) $(MOD_IMAGE) $(MOD_VERSION_TAG) 
@@ -150,5 +152,3 @@ all: image package
 shortimage: image
 
 package: $(MOD_PACKAGE_TGZ)
-
-
